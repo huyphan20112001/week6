@@ -3,6 +3,7 @@ const routes = {
   search: "/search",
   form: "/register",
   quiz: "/quiz",
+  login: "/login",
 };
 
 export default routes;

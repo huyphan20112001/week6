@@ -5,15 +5,22 @@ import { Route, Routes } from "react-router-dom";
 import { publicRoutes } from "./routes";
 import DefaultLayout from "./components/DefaultLayout/DefaultLayout";
 import { Fragment } from "react";
+import HeaderLayout from "./components/HeaderLayout/HeaderLayout";
 
 function App() {
   return (
     <div className="main">
       <Routes>
-        {publicRoutes.map((route, index) => {
+        {publicRoutes.map((route) => {
           const Page = route.element;
 
           let Layout = DefaultLayout;
+
+          if (route.layout) {
+            Layout = route.layout;
+          } else if (route.layout === null) {
+            Layout = Fragment;
+          }
 
           return (
             <Route
