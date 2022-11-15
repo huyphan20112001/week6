@@ -36,24 +36,32 @@ function Login() {
   return (
     <div className={cx("wrapper-content")}>
       <div className={cx("container")}>
-        <div className={cx("register")}>
+        <div className={cx("login")}>
           <form onSubmit={handleSubmit(handleCheckLogin)}>
-            <label>Username</label>
-            <input
-              {...register("username", { required: true })}
-              placeholder="Enter username"
-            />{" "}
-            <br />
-            {errors.username && <p>This field is required</p>}
-            <label>Password</label>
-            <input
-              type="password"
-              {...register("password", { required: true })}
-              placeholder="Enter password"
-            />{" "}
-            <br />
-            {errors.password && <p>This field is required</p>}
-            <input type="submit" value="Login" />
+            <div className={cx("input")}>
+              <input
+                className={cx("input-field")}
+                {...register("username", { required: true })}
+              />{" "}
+              <label className={cx("input-label")}>Username</label>
+              {errors.username && <p>This field is required</p>}
+            </div>
+            <div className={cx("input")}>
+              <input
+                className={cx("input-field")}
+                type="password"
+                {...register("password", { required: true })}
+              />{" "}
+              <label className={cx("input-label")}>Password</label>
+              {errors.password && <p>This field is required</p>}
+            </div>
+            <div className={cx("action")}>
+              <input
+                className={cx("action-button")}
+                type="submit"
+                value="Login"
+              />
+            </div>
           </form>
         </div>
       </div>

@@ -40,39 +40,65 @@ function Register() {
     <div className={cx("wrapper-content")}>
       <div className={cx("container")}>
         <div className={cx("register")}>
-          <form onSubmit={handleSubmit(onSubmit)}>
-            <label>Username</label>
-            <input
-              {...register("username", { required: true })}
-              placeholder="Enter username"
-            />{" "}
-            <br />
-            {errors.username && <p>This field is required</p>}
-            <label>Email</label>
-            <input
-              {...register("email", { required: true })}
-              placeholder="Enter email"
-            />{" "}
-            <br />
-            {errors.email && <p>This field is required</p>}
-            <label>Password</label>
-            <input
-              type="password"
-              {...register("password", { required: true })}
-              placeholder="Enter password"
-            />{" "}
-            <br />
-            {errors.password && <p>This field is required</p>}
-            <label>Re-Password</label>
-            <input
-              type="password"
-              {...register("rePassword", { required: true })}
-              placeholder="Re-Enter password"
-            />
-            <br />
-            {errors.rePassword && <p>This field is required</p>}
-            {errorPassword && <p>Password does not match</p>}
-            <input type="submit" value="Register" />
+          <form className={cx("form")} onSubmit={handleSubmit(onSubmit)}>
+            <div className={cx("wrapper-regiter")}>
+              <div className={cx("register-item")}>
+                <input
+                  className={cx("input")}
+                  {...register("fullname", { required: true })}
+                />
+                <label>Fullname</label>
+                {errors.username && (
+                  <p className={cx("red")}>This field is required</p>
+                )}
+              </div>
+              <div className={cx("register-item")}>
+                <input
+                  className={cx("input")}
+                  {...register("username", { required: true })}
+                />
+                <label>Username</label>
+                {errors.username && (
+                  <p className={cx("red")}>This field is required</p>
+                )}
+              </div>
+              <div className={cx("register-item")}>
+                <input
+                  className={cx("input")}
+                  {...register("email", { required: true })}
+                />
+                <label>Email</label>
+                {errors.email && (
+                  <p className={cx("red")}>This field is required</p>
+                )}
+              </div>
+              <div className={cx("register-item")}>
+                <input
+                  className={cx("input")}
+                  type="password"
+                  {...register("password", { required: true })}
+                />
+                <label>Password</label>
+                {errors.password && (
+                  <p className={cx("red")}>This field is required</p>
+                )}
+              </div>
+              <div className={cx("register-item")}>
+                <input
+                  className={cx("input")}
+                  type="password"
+                  {...register("rePassword", { required: true })}
+                />
+                <label>Re-Password</label>
+                {errors.rePassword && (
+                  <p className={cx("red")}>This field is required</p>
+                )}
+                {errorPassword && <p>Pass word does not match</p>}
+              </div>
+              <div className={cx("submit")}>
+                <input type="submit" value="Register" />
+              </div>
+            </div>
           </form>
         </div>
       </div>
