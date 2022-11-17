@@ -8,6 +8,7 @@ const cx = classNames.bind(styles);
 
 function SearchFilter() {
   const [users, setUsers] = useState([]);
+  const [userSearch, setUserSearch] = useState([]);
 
   const inputRef = useRef();
   const optionRef = useRef();
@@ -16,36 +17,39 @@ function SearchFilter() {
     const fetchUser = async () => {
       let response = await userList();
       setUsers(response);
+      setUserSearch(response);
     };
     fetchUser();
   }, []);
 
   const handleSearch = (e) => {
     if (e.key === "Enter") {
-      const newList = users.filter((user) => {
-        if (optionRef.current.value === "Username") {
-          return user.username
-            .toLowerCase()
-            .includes(inputRef.current.value.toLowerCase());
-        } else if (optionRef.current.value === "Name") {
-          return user.name
-            .toLowerCase()
-            .includes(inputRef.current.value.toLowerCase());
-        } else if (optionRef.current.value === "Email") {
-          return user.email
-            .toLowerCase()
-            .includes(inputRef.current.value.toLowerCase());
-        } else if (optionRef.current.value === "Phone") {
-          return user.phone
-            .toLowerCase()
-            .includes(inputRef.current.value.toLowerCase());
-        } else {
-          return user.website
-            .toLowerCase()
-            .includes(inputRef.current.value.toLowerCase());
-        }
-      });
-      setUsers(newList);
+      if (inputRef.current.value !== "") {
+        const newList = userSearch.filter((user) => {
+          if (optionRef.current.value === "Username") {
+            return user.username
+              .toLowerCase()
+              .includes(inputRef.current.value.toLowerCase());
+          } else if (optionRef.current.value === "Name") {
+            return user.name
+              .toLowerCase()
+              .includes(inputRef.current.value.toLowerCase());
+          } else if (optionRef.current.value === "Email") {
+            return user.email
+              .toLowerCase()
+              .includes(inputRef.current.value.toLowerCase());
+          } else if (optionRef.current.value === "Phone") {
+            return user.phone
+              .toLowerCase()
+              .includes(inputRef.current.value.toLowerCase());
+          } else {
+            return user.website
+              .toLowerCase()
+              .includes(inputRef.current.value.toLowerCase());
+          }
+        });
+        setUserSearch(newList);
+      } else setUserSearch(users);
     }
   };
 
@@ -83,7 +87,7 @@ function SearchFilter() {
                       <th>Phone</th>
                       <th>Website</th>
                     </tr>
-                    {users.map((user) => (
+                    {userSearch.map((user) => (
                       <UserItem key={user.id} data={user} />
                     ))}
                   </tbody>

@@ -47,6 +47,7 @@
   font: inherit;
   font-size: 1.125rem;
   padding: 0.25rem 0;
+  margin: 4px 0;
   &:focus,
   &:valid {
     outline: 0;
@@ -54,6 +55,7 @@
     & + .input-label {
       color: #6658d3;
       transform: translateY(-15px);
+      line-height: 18px;
     }
   }
 }

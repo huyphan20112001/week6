@@ -1,44 +1,64 @@
-import React, { useState } from "react";
+import React, { useEffect, useReducer, useRef, useState } from "react";
 import classNames from "classnames/bind";
 import styles from "./Register.module.scss";
-import { useForm } from "react-hook-form";
+import { Controller, set, useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
 
 const cx = classNames.bind(styles);
 
 function Register() {
+  const [errorPassword, setErrorPassword] = useState("");
+  const [openNoti, setOpenNoti] = useState(false);
+
   const navigate = useNavigate();
 
   const {
     register,
     handleSubmit,
     getValues,
+    setError,
     formState: { errors },
   } = useForm({
     criteriaMode: "all",
   });
 
-  const [errorPassword, setErrorPassword] = useState(false);
-
   const onSubmit = (data) => {
     const passwordValue = getValues("password");
     const rePasswordValue = getValues("rePassword");
-    if (passwordValue !== rePasswordValue) {
-      setErrorPassword(true);
+    if (passwordValue.length > 16 || passwordValue.length < 6) {
+      setError("password", {
+        types: {
+          message: "Password must be between 6 and 16 characters in length",
+        },
+      });
+    } else if (passwordValue !== rePasswordValue) {
+      setErrorPassword("Password does not match");
     } else {
-      setErrorPassword(false);
+      setErrorPassword("");
       localStorage.setItem("data", JSON.stringify(data));
-      handleClick();
+      setOpenNoti(true);
     }
   };
 
-  const handleClick = () => {
+  const handleRedirect = () => {
     navigate("/login");
   };
 
   return (
     <div className={cx("wrapper-content")}>
       <div className={cx("container")}>
+        {openNoti && (
+          <>
+            <div className={cx("notification")}>
+              <span>You have successfully registered</span>
+              <span>
+                You will be redirected to the <b>Login Page</b>
+              </span>
+              <button onClick={handleRedirect}>Ok</button>
+            </div>
+            <div className={cx("overlay")}></div>
+          </>
+        )}
         <div className={cx("register")}>
           <form className={cx("form")} onSubmit={handleSubmit(onSubmit)}>
             <div className={cx("wrapper-regiter")}>
@@ -84,9 +104,17 @@ function Register() {
                 <input
                   className={cx("input")}
                   type="password"
-                  {...register("password", { required: true })}
+                  {...register("password", {
+                    required: true,
+                    types: {
+                      maxLength: 16,
+                    },
+                  })}
                 />
                 <label>Password</label>
+                {errors.password && errors.password.types && (
+                  <p className={cx("red")}>{errors.password.types.message}</p>
+                )}
                 {errors.password && (
                   <p className={cx("red")}>This field is required</p>
                 )}
@@ -101,7 +129,7 @@ function Register() {
                 {errors.rePassword && (
                   <p className={cx("red")}>This field is required</p>
                 )}
-                {errorPassword && <p>Pass word does not match</p>}
+                {errorPassword !== "" && <p>{errorPassword}</p>}
               </div>
               <div className={cx("submit")}>
                 <input type="submit" value="Register" />
