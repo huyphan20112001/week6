@@ -7,3 +7,8 @@
     color: #ffd803;
   }
 }
+@media screen and (max-width: 550px) {
+  .header-item {
+    font-size: 16px;
+  }
+}

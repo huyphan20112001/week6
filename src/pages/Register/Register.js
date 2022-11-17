@@ -65,11 +65,19 @@ function Register() {
               <div className={cx("register-item")}>
                 <input
                   className={cx("input")}
-                  {...register("email", { required: true })}
+                  {...register("email", {
+                    required: true,
+                    pattern: {
+                      value:
+                        /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/,
+
+                      message: "Please enter a valid email",
+                    },
+                  })}
                 />
                 <label>Email</label>
                 {errors.email && (
-                  <p className={cx("red")}>This field is required</p>
+                  <p className={cx("red")}>Please enter a valid email</p>
                 )}
               </div>
               <div className={cx("register-item")}>

@@ -5,6 +5,7 @@
 .container-quiz {
   max-width: 1200px;
   margin: 0 auto;
+  padding: 0 20px;
 }
 .content-right {
   width: 100%;
@@ -167,8 +168,80 @@
   }
 }
 
-.show-score {
+.show-score span {
   font-size: 18px;
   font-weight: 600;
   margin-top: 10px;
+}
+.show-score {
+  position: fixed;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  width: 300px;
+  height: 200px;
+  border-radius: 15px;
+  border: 1px solid #007aff;
+  background-color: rgb(255, 255, 255);
+  color: #007aff;
+  text-align: center;
+  display: none;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  margin: auto;
+
+  & button {
+    outline: none;
+    border: 1px solid #007aff;
+    font-size: 14px;
+    font-weight: 600;
+    background-color: rgb(255, 255, 255);
+    color: #007aff;
+    cursor: pointer;
+    border-radius: 10px;
+    padding: 8px 20px;
+  }
+}
+.show-score.hidden {
+  display: flex;
+  z-index: 100;
+}
+.submit-test:disabled {
+  cursor: not-allowed;
+  &:hover {
+    border: none;
+  }
+}
+
+.action-nextPrev button:disabled {
+  cursor: not-allowed;
+}
+.overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  width: 100%;
+  height: 100%;
+  background-color: black;
+  opacity: 0.3;
+  display: none;
+}
+.overlay.hidden {
+  display: block;
+}
+.wrapper-content {
+  height: calc(100vh - 76px);
+}
+@media screen and (max-width: 800px) {
+  .wrapper-content-number {
+    display: flex;
+    flex-direction: column;
+  }
+  .content-right {
+    margin: 20px 0;
+  }
 }

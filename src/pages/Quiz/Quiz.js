@@ -10,11 +10,12 @@ function Quiz() {
   const [isTaking, setIsTaking] = useState(false);
   const [active, setActive] = useState(0);
   const [currentQuestion, setCurrentQuestion] = useState(0);
-  const [timer, setTimer] = useState("00:05:00");
+  const [timer, setTimer] = useState("00:00:30");
   const [choose, setChoose] = useState(0);
   const [score, setScore] = useState(0);
   const [showScore, setShowScore] = useState(false);
   const [listAnswer, setListAnswer] = useState(Array(questionList.length));
+  const [hidePopUp, setHidePopUp] = useState(true);
 
   const ref = useRef();
 
@@ -45,7 +46,7 @@ function Quiz() {
   };
 
   const clearTimer = (e) => {
-    setTimer("00:05:00");
+    setTimer("00:00:30");
     ref.current && clearInterval(ref.current);
     const id = setInterval(() => {
       startTimer(e);
@@ -55,7 +56,7 @@ function Quiz() {
 
   const getDeadTime = () => {
     let deadline = new Date();
-    deadline.setSeconds(deadline.getSeconds() + 300);
+    deadline.setSeconds(deadline.getSeconds() + 30);
     return deadline;
   };
   const handleTakeTest = () => {
@@ -76,7 +77,6 @@ function Quiz() {
       setActive(questionList.length);
       setCurrentQuestion(questionList.length);
     }
-
     setChoose(0);
   };
   const handlePrevQuestion = () => {
@@ -108,133 +108,154 @@ function Quiz() {
     });
     setScore(newScore);
     setShowScore(true);
+    setIsTaking(false);
+    setHidePopUp(false);
+    setActive(0);
   };
+
+  useEffect(() => {
+    if (isTaking && timer === "00:00:00") {
+      console.log(123);
+      handleSubmit();
+    }
+  }, [timer]);
+
+  console.log(listAnswer);
 
   return (
     <div className={cx("quiz-page")}>
+      {showScore && (
+        <>
+          <div className={cx("show-score", { hidden: !hidePopUp })}>
+            <span>
+              Your scored: {score}/{questionList.length}
+            </span>
+            <button onClick={() => setHidePopUp(true)}>Ok</button>
+          </div>
+          <div className={cx("overlay", { hidden: !hidePopUp })}></div>
+        </>
+      )}
       <div className={cx("wrapper-content")}>
         <div className={cx("container-quiz")}>
           <div className={cx("quiz")}>
             <div className={cx("heading")}>
               <h1>Quiz App</h1>
-              <div className={cx("wrapper-content-number")}>
-                <div className={cx("content-left")}>
-                  <div className={cx("question-number")}>
-                    <div className={cx("wrapper-number")}>
-                      <div className={cx("question-heading")}>
-                        Question Palette
-                      </div>
-                      <div className={cx("number-list")}>
-                        {questionList.map((question) => (
-                          <button
-                            className={cx("number-item", {
-                              active: active === question.id,
-                            })}
-                            key={question.id}
-                            onClick={() => handleSelectQuestion(question.id)}
-                          >
-                            {question.id}
-                          </button>
-                        ))}
-                      </div>
-                      <button
-                        ref={ref}
-                        onClick={handleSubmit}
-                        className={cx("submit-test")}
-                      >
-                        Submit
-                      </button>
+            </div>
+            <div className={cx("wrapper-content-number")}>
+              <div className={cx("content-left")}>
+                <div className={cx("question-number")}>
+                  <div className={cx("wrapper-number")}>
+                    <div className={cx("question-heading")}>
+                      Question Palette
                     </div>
+                    <div className={cx("number-list")}>
+                      {questionList.map((question) => (
+                        <button
+                          className={cx("number-item", {
+                            active: active === question.id,
+                          })}
+                          key={question.id}
+                          onClick={() => handleSelectQuestion(question.id)}
+                        >
+                          {question.id}
+                        </button>
+                      ))}
+                    </div>
+                    <button
+                      ref={ref}
+                      disabled={!isTaking}
+                      onClick={handleSubmit}
+                      className={cx("submit-test")}
+                    >
+                      Submit
+                    </button>
                   </div>
                 </div>
-                <div className={cx("content-right")}>
-                  <div className={cx("question-content")}>
-                    <div className={cx("time")}>{timer}</div>
-                    <div className={cx("detail")}>
-                      {!isTaking && !showScore ? (
-                        <img
-                          src="https://toeic-testpro.com/images/practice-in-progress.svg"
-                          alt="prev-take"
-                        />
-                      ) : (
-                        questionList
-                          .filter((question) => question.id === currentQuestion)
-                          .map((item, index) => {
-                            return (
-                              <>
-                                <div
-                                  key={index}
-                                  className={cx("detail-question")}
-                                >
-                                  {item.id}. {item.question}
-                                </div>
-                                <div className={cx("detail-anwser")}>
-                                  {item.answer.map((itemAnswer, index) => (
-                                    <div
-                                      onClick={() =>
-                                        handleChoose(itemAnswer, index + 1)
-                                      }
-                                      key={index}
-                                      className={cx("answer-item", {
-                                        selected: choose === index + 1,
-                                      })}
-                                    >
-                                      <div className={cx("choice")}>
-                                        <div
-                                          className={cx("choice-icon-wrapper")}
-                                        >
-                                          {choose === index + 1 ? (
-                                            <ChoiceIconSelected
-                                              className={cx("choice-icon")}
-                                            />
-                                          ) : (
-                                            <ChoiceIcon
-                                              className={cx("choice-icon")}
-                                            />
-                                          )}
-                                        </div>
-                                        {index + 1}. {itemAnswer}
+              </div>
+              <div className={cx("content-right")}>
+                <div className={cx("question-content")}>
+                  <div className={cx("time")}>{timer}</div>
+                  <div className={cx("detail")}>
+                    {!isTaking ? (
+                      <img
+                        src="https://toeic-testpro.com/images/practice-in-progress.svg"
+                        alt="prev-take"
+                      />
+                    ) : (
+                      questionList
+                        .filter((question) => question.id === currentQuestion)
+                        .map((item, index) => {
+                          return (
+                            <>
+                              <div
+                                key={index}
+                                className={cx("detail-question")}
+                              >
+                                {item.id}. {item.question}
+                              </div>
+                              <div className={cx("detail-anwser")}>
+                                {item.answer.map((itemAnswer, index) => (
+                                  <div
+                                    onClick={() =>
+                                      handleChoose(itemAnswer, index + 1)
+                                    }
+                                    key={index}
+                                    className={cx("answer-item", {
+                                      selected: choose === index + 1,
+                                    })}
+                                  >
+                                    <div className={cx("choice")}>
+                                      <div
+                                        className={cx("choice-icon-wrapper")}
+                                      >
+                                        {choose === index + 1 ? (
+                                          <ChoiceIconSelected
+                                            className={cx("choice-icon")}
+                                          />
+                                        ) : (
+                                          <ChoiceIcon
+                                            className={cx("choice-icon")}
+                                          />
+                                        )}
                                       </div>
+                                      {index + 1}. {itemAnswer}
                                     </div>
-                                  ))}
-                                </div>
-                              </>
-                            );
-                          })
-                      )}
-                      {showScore && (
-                        <div className={cx("show-score")}>
-                          Your scored: {score}
-                        </div>
-                      )}
-                    </div>
-                    <div className={cx("action")}>
-                      {!isTaking ? (
-                        <div className={cx("action-take")}>
-                          <button
-                            onClick={handleTakeTest}
-                            className={cx("take-btn")}
-                          >
-                            Take Test
-                          </button>
-                        </div>
-                      ) : (
-                        <div className={cx("action-nextPrev")}>
-                          <button
-                            onClick={handlePrevQuestion}
-                            className={cx("prev-btn")}
-                          >
-                            Previous
-                          </button>
-                          <button
-                            onClick={handleNextQuestion}
-                            className={cx("next-btn")}
-                          >
-                            Next
-                          </button>
-                        </div>
-                      )}
-                    </div>
+                                  </div>
+                                ))}
+                              </div>
+                            </>
+                          );
+                        })
+                    )}
+                  </div>
+                  <div className={cx("action")}>
+                    {!isTaking ? (
+                      <div className={cx("action-take")}>
+                        <button
+                          onClick={handleTakeTest}
+                          className={cx("take-btn")}
+                        >
+                          Take Test
+                        </button>
+                      </div>
+                    ) : (
+                      <div className={cx("action-nextPrev")}>
+                        <button
+                          disabled={active === 1}
+                          onClick={handlePrevQuestion}
+                          className={cx("prev-btn")}
+                        >
+                          Previous
+                        </button>
+                        <button
+                          disabled={questionList.length === active}
+                          onClick={handleNextQuestion}
+                          className={cx("next-btn")}
+                        >
+                          Next
+                        </button>
+                      </div>
+                    )}
                   </div>
                 </div>
               </div>

@@ -16,6 +16,11 @@
     margin: 0;
   }
 }
+.input {
+  & p {
+    color: red;
+  }
+}
 
 .input {
   display: flex;

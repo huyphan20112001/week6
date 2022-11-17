@@ -8,6 +8,8 @@ const cx = classNames.bind(styles);
 
 function Login() {
   const [data, setData] = useState([]);
+  const [errorUsername, setErrorUsername] = useState("");
+  const [errorPassword, setErrorPassword] = useState("");
 
   const navigate = useNavigate();
 
@@ -31,6 +33,8 @@ function Login() {
     const usernameValue = getValues("username");
     const passwordValue = getValues("password");
     username === usernameValue && password === passwordValue && navigate("/");
+    username !== usernameValue && setErrorUsername("Username does not exist");
+    password !== passwordValue && setErrorPassword("Password does not match");
   };
 
   return (
@@ -44,6 +48,7 @@ function Login() {
                 {...register("username", { required: true })}
               />{" "}
               <label className={cx("input-label")}>Username</label>
+              {errorUsername !== "" && <p>{errorUsername}</p>}
               {errors.username && <p>This field is required</p>}
             </div>
             <div className={cx("input")}>
@@ -53,6 +58,7 @@ function Login() {
                 {...register("password", { required: true })}
               />{" "}
               <label className={cx("input-label")}>Password</label>
+              {errorPassword !== "" && <p>{errorPassword}</p>}
               {errors.password && <p>This field is required</p>}
             </div>
             <div className={cx("action")}>
