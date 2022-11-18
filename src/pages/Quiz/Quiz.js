@@ -64,6 +64,7 @@ function Quiz() {
     setCurrentQuestion(1);
     setActive(1);
     clearTimer(getDeadTime());
+    setListAnswer([]);
   };
   const handleSelectQuestion = (id) => {
     setActive(id);
@@ -115,12 +116,33 @@ function Quiz() {
 
   useEffect(() => {
     if (isTaking && timer === "00:00:00") {
-      console.log(123);
       handleSubmit();
     }
   }, [timer]);
 
-  console.log(listAnswer);
+  useEffect(() => {
+    questionList.map((item, indexList) => {
+      // console.log(questionList[index].answer);
+      // console.log(answer, index);
+      const { answer } = item;
+      answer.forEach((itemAnswer, indexAnswer) => {
+        // console.log(listAnswer);
+        listAnswer.forEach((i, index) => {
+          // console.log(i);
+          // console.log(itemAnswer);
+          console.log("current: ", currentQuestion);
+          console.log("index", index + 1);
+          console.log(i === itemAnswer, currentQuestion === index + 1);
+          console.log(i === itemAnswer && currentQuestion === index + 1);
+          console.log(i);
+          // console.log(i === itemAnswer && currentQuestion === index + 1);
+          i === itemAnswer &&
+            currentQuestion === index + 1 &&
+            setChoose(indexAnswer + 1);
+        });
+      });
+    });
+  }, [currentQuestion]);
 
   return (
     <div className={cx("quiz-page")}>
