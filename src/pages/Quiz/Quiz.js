@@ -130,11 +130,11 @@ function Quiz() {
         listAnswer.forEach((i, index) => {
           // console.log(i);
           // console.log(itemAnswer);
-          console.log("current: ", currentQuestion);
-          console.log("index", index + 1);
-          console.log(i === itemAnswer, currentQuestion === index + 1);
-          console.log(i === itemAnswer && currentQuestion === index + 1);
-          console.log(i);
+          // console.log("current: ", currentQuestion);
+          // console.log("index", index + 1);
+          // console.log(i === itemAnswer, currentQuestion === index + 1);
+          // console.log(i === itemAnswer && currentQuestion === index + 1);
+          // console.log(i);
           // console.log(i === itemAnswer && currentQuestion === index + 1);
           i === itemAnswer &&
             currentQuestion === index + 1 &&
